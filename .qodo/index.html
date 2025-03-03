@@ -1,0 +1,170 @@
+<html lang="az"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mehemmed - Wi-Fi ilə Telefon Şarj</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        #phone {
+            width: 200px;
+            height: 400px;
+            background-color: black;
+            border-radius: 20px;
+            margin: 20px auto;
+            position: relative;
+            padding: 20px;
+            color: white;
+        }
+        #battery {
+            width: 10%;
+            height: 30px;
+            background-color: red;
+            transition: width 1s ease-in-out;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #chat-box, #info, #comments {
+            width: 60%;
+            margin: 20px auto;
+            text-align: left;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #chat-messages {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        #chat-input, #comment-input {
+            width: 100%;
+            height: 50px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mehemmed - Wi-Fi ilə Telefon Şarj Prankı</h1>
+    <div id="phone">
+        <p>Telefon</p>
+        <div id="battery"></div>
+    </div>
+    <button class="button" onclick="startCharging()">Wi-Fi ilə Şarj Et</button>
+    <button class="button" onclick="drainBattery()">Sürətli Yığdırma Rejimi</button>
+    <button class="button" onclick="stopCharging()">Şarjı Dayandır</button>
+    
+    <div id="info">
+        <h2>Sayt Haqqında</h2>
+        <p>Bu sayt zarafat məqsədi ilə yaradılmışdır və real Wi-Fi şarjı mümkün deyil. Sayt eyni zamanda süni intellekt və texnologiyalar haqqında məlumat vermək üçün hazırlanıb.</p>
+    </div>
+    
+    <div id="chat-box">
+        <h2>Mehemmed AI ilə söhbət</h2>
+        <div id="chat-messages"></div>
+        <textarea id="chat-input" placeholder="Sualınızı yazın..."></textarea>
+        <button class="button" onclick="sendMessage()">Göndər</button>
+    </div>
+    
+    <div id="comments">
+        <h2>Şərhlər və Qiymətləndirmə</h2>
+        <div id="comment-list"></div>
+        <textarea id="comment-input" placeholder="Şərhinizi yazın..."></textarea>
+        <button class="button" onclick="addComment()">Göndər</button>
+    </div>
+    
+    <script>
+        let chargingInterval;
+        let drainingInterval;
+
+        function startCharging() {
+            clearInterval(drainingInterval);
+            let battery = document.getElementById("battery");
+            let width = parseInt(battery.style.width) || 10;
+            chargingInterval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(chargingInterval);
+                } else {
+                    width += 5;
+                    battery.style.width = width + "%";
+                    battery.style.backgroundColor = "green";
+                }
+            }, 500);
+            alert("Telefonunuz Wi-Fi ilə şarj olunur! ");
+        }
+
+        function stopCharging() {
+            clearInterval(chargingInterval);
+            clearInterval(drainingInterval);
+            alert("Şarj dayandırıldı!");
+        }
+
+        function drainBattery() {
+            clearInterval(chargingInterval);
+            let battery = document.getElementById("battery");
+            let width = parseInt(battery.style.width) || 100;
+            drainingInterval = setInterval(() => {
+                if (width <= 10) {
+                    clearInterval(drainingInterval);
+                } else {
+                    width -= 5;
+                    battery.style.width = width + "%";
+                    battery.style.backgroundColor = "red";
+                }
+            }, 200); // Batareya daha sürətli azalır
+            alert("Sürətli yığdırma rejimi aktivdir! 😈");
+        }
+
+        function sendMessage() {
+            let input = document.getElementById("chat-input");
+            let message = input.value.trim();
+            if (message === "") return;
+            
+            let chatMessages = document.getElementById("chat-messages");
+            let userMessage = document.createElement("p");
+            userMessage.style.fontWeight = "bold";
+            userMessage.innerText = "Siz: " + message;
+            chatMessages.appendChild(userMessage);
+            
+            setTimeout(() => {
+                let botMessage = document.createElement("p");
+                botMessage.style.color = "blue";
+                botMessage.innerText = "Mehemmed AI: " + getBotResponse(message);
+                chatMessages.appendChild(botMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+            
+            input.value = "";
+        }
+
+        function getBotResponse(message) {
+            message = message.toLowerCase();
+            if (message.includes("salam")) return "Salam! Mən Mehemmed AI. Sizə necə kömək edə bilərəm?";
+            if (message.includes("wifi")) return "Wi-Fi ilə şarj etmək mümkün deyil. Bu sadəcə bir zarafatdır!";
+            if (message.includes("sayt")) return "Bu sayt texnologiya və süni intellekt haqqında məlumat vermək üçün yaradılıb.";
+            return "Bağışlayın, bu haqda çox məlumatım yoxdur. Başqa bir sualınız var?";
+        }
+
+        function addComment() {
+            let input = document.getElementById("comment-input");
+            let commentText = input.value.trim();
+            if (commentText === "") return;
+            let commentList = document.getElementById("comment-list");
+            let commentBox = document.createElement("div");
+            commentBox.innerHTML = `<p>${commentText}</p>`;
+            commentList.appendChild(commentBox);
+            input.value = "";
+        }
+    </script>
+
+</body></html>
